@@ -207,7 +207,7 @@ export const uploadImage = async (req, res) => {
     res.status(200).json({
       message: "Image uploaded successfully",
 
-      imageUrl: `/uploads/products/${req.file.filename}`,
+      imageUrl: req.file.path,
     });
   } catch (error) {
     res.status(500).json({

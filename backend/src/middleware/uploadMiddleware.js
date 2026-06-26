@@ -1,22 +1,27 @@
 import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js";
 import path from "path";
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads/products");
-    },
+const storage = new CloudinaryStorage({
+    cloudinary,
 
-    filename: (req, file, cb) => {
-        const uniqueName =
-            Date.now() +
-            "-" +
-            Math.round(Math.random() * 1e9);
+    params: {
+        folder: "medicure-products",
 
-        cb(
-            null,
-            uniqueName +
-            path.extname(file.originalname)
-        );
+        allowed_formats: [
+            "jpg",
+            "jpeg",
+            "png",
+            "webp"
+        ],
+
+        transformation: [
+            {
+                width: 800,
+                crop: "limit"
+            }
+        ]
     }
 });
 
