@@ -78,31 +78,61 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="flex items-center gap-4">
-            {/* Search Bar */}
-            <div className="relative w-full md:w-80">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-              <input
-                type="text"
-                placeholder="Search medicines..."
-                value={search}
-                onChange={(e) => searchProducts(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg leading-5 bg-white placeholder-slate-500 focus:outline-none focus:placeholder-slate-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors duration-200"
-              />
-            </div>
+<div className="flex flex-wrap items-center gap-3">
 
-            {/* View Cart Button */}
-            <Link to="/cart" className="shrink-0">
-              <button className="flex items-center justify-center px-4 py-2 bg-slate-900 text-white font-medium rounded-lg hover:bg-slate-800 transition-colors shadow-sm gap-2">
-                <span>🛒</span>
-                <span className="hidden sm:inline">View Cart</span>
-              </button>
-            </Link>
-          </div>
+  {/* User Login */}
+  <Link to="/login">
+    <button className="px-4 py-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-100 transition">
+      User Login
+    </button>
+  </Link>
+
+  {/* User Register */}
+  <Link to="/register">
+    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+      Register
+    </button>
+  </Link>
+
+  {/* Chemist Login */}
+  <Link to="/chemist/login">
+    <button className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition">
+      Chemist Login
+    </button>
+  </Link>
+
+  {/* Chemist Register */}
+  <Link to="/chemist/register">
+    <button className="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition">
+      Chemist Register
+    </button>
+  </Link>
+
+  {/* Delivery Login */}
+  <Link to="/delivery/login">
+    <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
+      Delivery Login
+    </button>
+  </Link>
+
+  {/* Admin Login */}
+  <Link to="/admin/login">
+    <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+      Admin Login
+    </button>
+  </Link>
+
+  {/* View Cart */}
+  <Link to="/cart">
+    <button className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition">
+      🛒
+      <span className="hidden sm:inline">
+        View Cart
+      </span>
+    </button>
+  </Link>
+
+</div>
         </div>
 
         {/* Product Grid */}
