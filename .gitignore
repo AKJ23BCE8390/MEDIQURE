@@ -1,0 +1,44 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# IDE
+.vscode/
+.idea/
+
+# Node Modules
+**/node_modules/
+
+# Build folders
+**/dist/
+**/build/
+
+# Cache
+.cache/
+
+# Coverage
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Uploads (ignore uploaded images)
+backend/uploads/
+uploads/
+
+# Package manager
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
