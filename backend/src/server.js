@@ -32,7 +32,7 @@ app.use(
     cors({
         origin: [
             "http://localhost:5173",
-            "https://mediqure.in",
+            "https://www.mediqure.in",
         ],
         credentials: true
     })
