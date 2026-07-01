@@ -32,7 +32,7 @@ app.use(
     cors({
         origin: [
             "http://localhost:5173",
-            "https://mediqure.vercel.app"
+            "https://mediqure.in",
         ],
         credentials: true
     })
