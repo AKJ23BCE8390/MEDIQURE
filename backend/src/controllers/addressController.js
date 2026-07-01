@@ -4,15 +4,19 @@ import { db } from "../config/db.js";
 export const addAddress = async (req, res) => {
     try {
         const {
-            fullName,
-            phone,
-            house,
-            street,
-            city,
-            state,
-            pincode,
-            isDefault
-        } = req.body;
+    fullName,
+    phone,
+    house,
+    street,
+    landmark,
+    city,
+    state,
+    pincode,
+    latitude,
+    longitude,
+    addressType,
+    isDefault
+} = req.body;
 
         const userId = new ObjectId(req.user.id);
 
@@ -20,7 +24,13 @@ export const addAddress = async (req, res) => {
             _id: userId
         });
 
-        const addresses = user.addresses || [];
+        if (!user) {
+    return res.status(404).json({
+        message: "User not found"
+    });
+}
+
+const addresses = user.addresses || [];
 
         if (isDefault) {
             addresses.forEach(address => {
@@ -29,16 +39,39 @@ export const addAddress = async (req, res) => {
         }
 
         const newAddress = {
-            _id: new ObjectId(),
-            fullName,
-            phone,
-            house,
-            street,
-            city,
-            state,
-            pincode,
-            isDefault: isDefault || false
-        };
+    _id: new ObjectId(),
+
+    fullName,
+
+    phone,
+
+    house,
+
+    street,
+
+    landmark,
+
+    city,
+
+    state,
+
+    pincode,
+
+    latitude,
+
+    longitude,
+
+    addressType,
+
+    isDefault:
+        addresses.length === 0
+            ? true
+            : isDefault || false,
+
+    createdAt: new Date(),
+
+    updatedAt: new Date()
+};
 
         addresses.push(newAddress);
 
@@ -93,20 +126,29 @@ export const updateAddress = async (req, res) => {
     try {
         const { addressId } = req.params;
 
-        const {
-            fullName,
-            phone,
-            house,
-            street,
-            city,
-            state,
-            pincode,
-            isDefault
-        } = req.body;
+       const {
+    fullName,
+    phone,
+    house,
+    street,
+    landmark,
+    city,
+    state,
+    pincode,
+    latitude,
+    longitude,
+    addressType,
+    isDefault
+} = req.body;
 
         const user = await db.collection("users").findOne({
             _id: new ObjectId(req.user.id)
         });
+        if (!user) {
+    return res.status(404).json({
+        message: "User not found"
+    });
+}
 
         const updatedAddresses =
             user.addresses.map(address => {
@@ -115,16 +157,34 @@ export const updateAddress = async (req, res) => {
                     addressId
                 ) {
                     return {
-                        ...address,
-                        fullName,
-                        phone,
-                        house,
-                        street,
-                        city,
-                        state,
-                        pincode,
-                        isDefault
-                    };
+    ...address,
+
+    fullName,
+
+    phone,
+
+    house,
+
+    street,
+
+    landmark,
+
+    city,
+
+    state,
+
+    pincode,
+
+    latitude,
+
+    longitude,
+
+    addressType,
+
+    isDefault,
+
+    updatedAt: new Date()
+};
                 }
 
                 if (isDefault) {
@@ -160,7 +220,17 @@ export const updateAddress = async (req, res) => {
 };
 
 export const deleteAddress = async (req, res) => {
+    
     try {
+        const user = await db.collection("users").findOne({
+    _id: new ObjectId(req.user.id)
+});
+
+if (!user) {
+    return res.status(404).json({
+        message: "User not found"
+    });
+}
         const { addressId } = req.params;
 
         await db.collection("users").updateOne(
@@ -185,4 +255,53 @@ export const deleteAddress = async (req, res) => {
             message: error.message
         });
     }
+};
+
+export const setDefaultAddress = async (req, res) => {
+
+    try {
+
+        const { addressId } = req.params;
+
+        const user =
+            await db.collection("users").findOne({
+                _id: new ObjectId(req.user.id)
+            });
+
+        if (!user) {
+    return res.status(404).json({
+        message: "User not found"
+    });
+}
+
+        const updatedAddresses =
+            user.addresses.map(address => ({
+                ...address,
+                isDefault:
+                    address._id.toString() === addressId
+            }));
+
+        await db.collection("users").updateOne(
+            {
+                _id: new ObjectId(req.user.id)
+            },
+            {
+                $set: {
+                    addresses: updatedAddresses
+                }
+            }
+        );
+
+        res.json({
+            message: "Default address updated"
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+
 };

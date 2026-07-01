@@ -1,47 +1,102 @@
+import { ObjectId } from "mongodb";
 import { db } from "../config/db.js";
 
-export const addToWishlist =
-    async (req, res) => {
+export const addToWishlist = async (req, res) => {
+    try {
 
-        const {
-            productId
-        } = req.body;
+        const userId = req.user.id;
+        const productObjectId = new ObjectId(req.body.productId);
 
-        await db
-            .collection(
-                "wishlist"
-            )
-            .insertOne({
-                userId:
-                    req.user.id,
-
-                productId,
-
-                createdAt:
-                    new Date()
+        const existing = await db
+            .collection("wishlists")
+            .findOne({
+                userId,
+                productId: productObjectId
             });
 
-        res.status(201).json({
-            message:
-                "Added to wishlist"
+        if (existing) {
+            return res.status(400).json({
+                message: "Product already in wishlist"
+            });
+        }
+
+        await db.collection("wishlists").insertOne({
+            userId,
+            productId: productObjectId,
+            createdAt: new Date()
         });
-    };
 
-export const getWishlist =
-    async (req, res) => {
+        res.status(201).json({
+            message: "Added to wishlist"
+        });
 
-        const items =
-            await db
-                .collection(
-                    "wishlist"
-                )
-                .find({
-                    userId:
-                        req.user.id
-                })
-                .toArray();
+    } catch (error) {
 
-        res.status(200).json(
-            items
-        );
-    };
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+};
+
+export const getWishlist = async (req, res) => {
+
+    try {
+
+        const userId = req.user.id;
+
+        const wishlist = await db
+            .collection("wishlists")
+            .aggregate([
+                {
+                    $match: {
+                        userId
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "products",
+                        localField: "productId",
+                        foreignField: "_id",
+                        as: "product"
+                    }
+                },
+                {
+                    $unwind: "$product"
+                }
+            ])
+            .toArray();
+
+        res.json(wishlist);
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+};
+
+export const removeWishlist = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        await db.collection("wishlists").deleteOne({
+            _id: new ObjectId(id)
+        });
+
+        res.json({
+            message: "Removed from wishlist"
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+};

@@ -22,6 +22,7 @@ import { connectDB } from "./config/db.js";
 
 import notificationRoutes from "./routes/notificationRoutes.js";
 import couponRoutes from "./routes/couponRoutes.js";
+import wishlistRoutes from "./routes/wishlistRoutes.js";
 
 dotenv.config({ path: "../.env" });
 
@@ -55,6 +56,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/coupons", couponRoutes);
+app.use("/api/wishlist",wishlistRoutes);
 
 
 app.get("/", (req, res) => {

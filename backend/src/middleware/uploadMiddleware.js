@@ -1,111 +1,105 @@
 import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cloudinary from "../config/cloudinary.js";
-import path from "path";
 
-const storage = new CloudinaryStorage({
+/* ===========================
+   Product Image Storage
+=========================== */
+
+const productStorage = new CloudinaryStorage({
     cloudinary,
-
-    params: {
-        folder: "medicure-products",
-
-        allowed_formats: [
-            "jpg",
-            "jpeg",
-            "png",
-            "webp"
-        ],
-
+    params: async (req, file) => ({
+        folder: "medicure/products",
+        resource_type: "image",
         transformation: [
             {
                 width: 800,
-                crop: "limit"
+                height: 800,
+                crop: "limit",
+                quality: "auto",
+                fetch_format: "auto"
             }
         ]
-    }
+    })
 });
 
-const fileFilter = (
-    req,
-    file,
-    cb
-) => {
+/* ===========================
+   Prescription Storage
+=========================== */
+
+const prescriptionStorage = new CloudinaryStorage({
+    cloudinary,
+    params: async (req, file) => ({
+        folder: "medicure/prescriptions",
+        resource_type: "image",
+        transformation: [
+            {
+                width: 1200,
+                crop: "limit",
+                quality: "auto",
+                fetch_format: "auto"
+            }
+        ]
+    })
+});
+
+/* ===========================
+   Image Validation
+=========================== */
+
+const imageFilter = (req, file, cb) => {
+
     const allowedTypes = [
         "image/jpeg",
-        "image/jpg",
         "image/png",
         "image/webp"
     ];
 
-    if (
-        allowedTypes.includes(file.mimetype)
-    ) {
+    if (allowedTypes.includes(file.mimetype)) {
+
         cb(null, true);
+
     } else {
+
         cb(
             new Error(
-                "Only jpg, jpeg, png and webp images are allowed"
-            )
+                "Only JPG, PNG and WEBP images are allowed."
+            ),
+            false
         );
+
     }
+
 };
 
-export const uploadProductImage =
-    multer({
-        storage,
-        fileFilter,
-        limits: {
-            fileSize: 5 * 1024 * 1024
-        }
-    });
+/* ===========================
+   Product Upload Middleware
+=========================== */
 
-const prescriptionStorage =
-    multer.diskStorage({
-        destination: (
-            req,
-            file,
-            cb
-        ) => {
-            cb(
-                null,
-                path.join(
-                    process.cwd(),
-                    "uploads",
-                    "prescriptions"
-                )
-            );
-        },
+export const uploadProductImage = multer({
 
-        filename: (
-            req,
-            file,
-            cb
-        ) => {
-            const uniqueName =
-                Date.now() +
-                "-" +
-                Math.round(
-                    Math.random() * 1e9
-                );
+    storage: productStorage,
 
-            cb(
-                null,
-                uniqueName +
-                path.extname(
-                    file.originalname
-                )
-            );
-        }
-    });
+    fileFilter: imageFilter,
 
-export const uploadPrescription =
-    multer({
-        storage:
-            prescriptionStorage,
-        limits: {
-            fileSize:
-                10 *
-                1024 *
-                1024
-        }
-    });
+    limits: {
+        fileSize: 5 * 1024 * 1024
+    }
+
+});
+
+/* ===========================
+   Prescription Upload Middleware
+=========================== */
+
+export const uploadPrescription = multer({
+
+    storage: prescriptionStorage,
+
+    fileFilter: imageFilter,
+
+    limits: {
+        fileSize: 10 * 1024 * 1024
+    }
+
+});

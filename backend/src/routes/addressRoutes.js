@@ -4,7 +4,8 @@ import {
     addAddress,
     getAddresses,
     updateAddress,
-    deleteAddress
+    deleteAddress,
+    setDefaultAddress
 } from "../controllers/addressController.js";
 
 import {
@@ -43,6 +44,13 @@ router.delete(
     verifyToken,
     isUser,
     deleteAddress
+);
+
+router.patch(
+    "/:addressId/default",
+    verifyToken,
+    isUser,
+    setDefaultAddress
 );
 
 export default router;

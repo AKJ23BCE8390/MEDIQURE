@@ -29,36 +29,80 @@ export default function AddProduct() {
   };
 
   const submit = async (e) => {
+
     e.preventDefault();
+
     try {
-      setLoading(true);
-      let imageUrl = "";
 
-      if (image) {
-        const imageData = new FormData();
-        imageData.append("image", image);
+        setLoading(true);
 
-        const uploadRes = await api.post("/products/upload-image", imageData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        imageUrl = uploadRes.data.imageUrl;
-      }
+        const formData = new FormData();
 
-      await api.post("/products", {
-        ...form,
-        image: imageUrl,
-      });
+        formData.append("name", form.name);
+        formData.append("brand", form.brand);
+        formData.append("category", form.category);
+        formData.append("description", form.description);
+        formData.append("price", form.price);
+        formData.append("stock", form.stock);
+        formData.append("expiryDate", form.expiryDate);
+        formData.append(
+            "prescriptionRequired",
+            form.prescriptionRequired
+        );
 
-      alert("Product added successfully");
-      navigate("/chemist/products");
-    } catch (error) {
-      alert(error.response?.data?.message || "Error adding product");
-    } finally {
-      setLoading(false);
+        if (image) {
+
+            formData.append(
+                "image",
+                image
+            );
+
+        }
+
+        await api.post(
+
+            "/products",
+
+            formData,
+
+            {
+
+                headers: {
+
+                    "Content-Type":
+                        "multipart/form-data"
+
+                }
+
+            }
+
+        );
+
+        alert("Product added successfully");
+
+        navigate("/chemist/products");
+
     }
-  };
+
+    catch (error) {
+
+        alert(
+
+            error.response?.data?.message ||
+
+            "Error adding product"
+
+        );
+
+    }
+
+    finally {
+
+        setLoading(false);
+
+    }
+
+};
 
   // Shared Tailwind class for inputs
   const inputStyles =

@@ -1,60 +1,86 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Layout from "./components/Layout";
+import ProtectedRoute from "./routes/ProtectedRoute";
+
+/* Landing */
+import LandingPage from "./pages/LandingPage";
+
+/* User */
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-
 import Home from "./pages/user/Home";
 import ProductDetails from "./pages/user/ProductDetails";
 import Cart from "./pages/user/Cart";
 import Checkout from "./pages/user/Checkout";
 import MyOrders from "./pages/user/MyOrders";
 import TrackOrder from "./pages/user/TrackOrder";
+import Addresses from "./pages/user/Addresses";
+import Profile from "./pages/user/Profile";
+import AddressForm from "./pages/user/AddressForm";
+import Wishlist from "./pages/user/Wishlist";
 
+
+/* Chemist */
+import ChemistLogin from "./pages/chemist/Login";
+import ChemistRegister from "./pages/chemist/Register";
 import Dashboard from "./pages/chemist/Dashboard";
 import Products from "./pages/chemist/Products";
 import Orders from "./pages/chemist/Orders";
 import AddProduct from "./pages/chemist/AddProduct";
 import EditProduct from "./pages/chemist/EditProduct";
+import Inventory from "./pages/chemist/Inventory";
+import Analytics from "./pages/chemist/Analytics";
+import ExpiryProducts from "./pages/chemist/ExpiryProducts";
 
-import ProtectedRoute from "./routes/ProtectedRoute";
-import ChemistLogin from "./pages/chemist/Login";
+/* Admin */
 import AdminLogin from "./pages/admin/Login";
-import DeliveryLogin from "./pages/delivery/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
 import Chemists from "./pages/admin/Chemists";
 import Stats from "./pages/admin/Stats";
 import AdminOrders from "./pages/admin/Orders";
 import DeliveryBoys from "./pages/admin/DeliveryBoys";
 import AssignDelivery from "./pages/admin/AssignDelivery";
-import DeliveryDashboard from "./pages/delivery/Dashboard";
-
-import DeliveryOrders from "./pages/delivery/Orders";
-
-import Notifications from "./pages/Notifications";
-
-import Navbar from "./components/Navbar";
-import Layout from "./components/Layout";
-import Inventory from "./pages/chemist/Inventory";
-import Analytics from "./pages/chemist/Analytics";
-import ExpiryProducts from "./pages/chemist/ExpiryProducts";
 import Coupons from "./pages/admin/Coupons";
 import CreateCoupon from "./pages/admin/CreateCoupon";
+
+/* Delivery */
+import DeliveryLogin from "./pages/delivery/Login";
+import DeliveryDashboard from "./pages/delivery/Dashboard";
+import DeliveryOrders from "./pages/delivery/Orders";
+
+/* Notifications */
+import Notifications from "./pages/Notifications";
 
 function App() {
   return (
     <BrowserRouter>
       <Layout>
         <Routes>
-          {/* Public Routes */}
 
-          <Route path="/login" element={<Login />} />
-
-          <Route path="/register" element={<Register />} />
-
-          {/* User Routes */}
+          {/* ================= LANDING PAGE ================= */}
 
           <Route
             path="/"
+            element={<LandingPage />}
+          />
+
+          {/* ================= USER AUTH ================= */}
+
+          <Route
+            path="/login"
+            element={<Login />}
+          />
+
+          <Route
+            path="/register"
+            element={<Register />}
+          />
+
+          {/* ================= USER ================= */}
+
+          <Route
+            path="/home"
             element={
               <ProtectedRoute role="user">
                 <Home />
@@ -107,7 +133,19 @@ function App() {
             }
           />
 
-          {/* Chemist Routes */}
+          {/* ================= CHEMIST AUTH ================= */}
+
+          <Route
+            path="/chemist/login"
+            element={<ChemistLogin />}
+          />
+
+          <Route
+            path="/chemist/register"
+            element={<ChemistRegister />}
+          />
+
+          {/* ================= CHEMIST ================= */}
 
           <Route
             path="/chemist"
@@ -153,11 +191,42 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/chemist/login" element={<ChemistLogin />} />
 
-          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/chemist/inventory"
+            element={
+              <ProtectedRoute role="chemist">
+                <Inventory />
+              </ProtectedRoute>
+            }
+          />
 
-          <Route path="/delivery/login" element={<DeliveryLogin />} />
+          <Route
+            path="/chemist/analytics"
+            element={
+              <ProtectedRoute role="chemist">
+                <Analytics />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/chemist/expiry"
+            element={
+              <ProtectedRoute role="chemist">
+                <ExpiryProducts />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ================= ADMIN AUTH ================= */}
+
+          <Route
+            path="/admin/login"
+            element={<AdminLogin />}
+          />
+
+          {/* ================= ADMIN ================= */}
 
           <Route
             path="/admin"
@@ -167,6 +236,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/admin/chemists"
             element={
@@ -175,6 +245,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/admin/stats"
             element={
@@ -194,6 +265,15 @@ function App() {
           />
 
           <Route
+            path="/admin/orders/:orderId/assign"
+            element={
+              <ProtectedRoute role="admin">
+                <AssignDelivery />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
             path="/admin/delivery-boys"
             element={
               <ProtectedRoute role="admin">
@@ -203,13 +283,31 @@ function App() {
           />
 
           <Route
-            path="/admin/orders/:orderId/assign"
+            path="/admin/coupons"
             element={
               <ProtectedRoute role="admin">
-                <AssignDelivery />
+                <Coupons />
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/admin/create-coupon"
+            element={
+              <ProtectedRoute role="admin">
+                <CreateCoupon />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ================= DELIVERY AUTH ================= */}
+
+          <Route
+            path="/delivery/login"
+            element={<DeliveryLogin />}
+          />
+
+          {/* ================= DELIVERY ================= */}
 
           <Route
             path="/delivery"
@@ -228,36 +326,68 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* ================= NOTIFICATIONS ================= */}
+
           <Route
-            path="/chemist/inventory"
+            path="/notifications"
             element={
-              <ProtectedRoute role="chemist">
-                <Inventory />
+              <ProtectedRoute>
+                <Notifications />
               </ProtectedRoute>
             }
           />
           <Route
-            path="/chemist/analytics"
-            element={
-              <ProtectedRoute role="chemist">
-                <Analytics />
-              </ProtectedRoute>
-            }
-          />
+  path="/profile/addresses"
+  element={
+    <ProtectedRoute role="user">
+      <Addresses />
+    </ProtectedRoute>
+  }
+/>
+<Route
+    path="/profile"
+    element={
+        <ProtectedRoute role="user">
+            <Profile />
+        </ProtectedRoute>
+    }
+/>
+<Route
+    path="/profile/address/new"
+    element={
+        <ProtectedRoute role="user">
+            <AddressForm />
+        </ProtectedRoute>
+    }
+/>
 
-          <Route
-            path="/chemist/expiry"
-            element={
-              <ProtectedRoute role="chemist">
-                <ExpiryProducts />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/admin/coupons" element={<Coupons />} />
+<Route
+    path="/profile/address/edit/:addressId"
+    element={
+        <ProtectedRoute role="user">
+            <AddressForm />
+        </ProtectedRoute>
+    }
+/>
+<Route
+    path="/wishlist"
+    element={
+        <ProtectedRoute role="user">
+            <Wishlist />
+        </ProtectedRoute>
+    }
+/>
 
-          <Route path="/admin/create-coupon" element={<CreateCoupon />} />
 
-          <Route path="/notifications" element={<Notifications />} />
+
+
+
+
+
+
+
+
         </Routes>
       </Layout>
     </BrowserRouter>

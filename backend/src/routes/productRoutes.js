@@ -17,13 +17,14 @@ import {
 
 import { uploadProductImage } from "../middleware/uploadMiddleware.js";
 
-import { verifyToken }
-from "../middleware/authMiddleware.js";
-
-import { isChemist }
-from "../middleware/roleMiddleware.js";
+import { verifyToken } from "../middleware/authMiddleware.js";
+import { isChemist } from "../middleware/roleMiddleware.js";
 
 const router = express.Router();
+
+/* ===========================================
+   Upload Image Only (Optional)
+=========================================== */
 
 router.post(
     "/upload-image",
@@ -33,12 +34,21 @@ router.post(
     uploadImage
 );
 
+/* ===========================================
+   Add Product
+=========================================== */
+
 router.post(
     "/",
     verifyToken,
     isChemist,
+    uploadProductImage.single("image"),
     addProduct
 );
+
+/* ===========================================
+   My Products
+=========================================== */
 
 router.get(
     "/my-products",
@@ -46,6 +56,10 @@ router.get(
     isChemist,
     getChemistProducts
 );
+
+/* ===========================================
+   Search & Filter
+=========================================== */
 
 router.get(
     "/search",
@@ -56,6 +70,10 @@ router.get(
     "/filter",
     filterProducts
 );
+
+/* ===========================================
+   Inventory
+=========================================== */
 
 router.get(
     "/inventory/stats",
@@ -78,17 +96,30 @@ router.get(
     getExpiryProducts
 );
 
+/* ===========================================
+   All Products
+=========================================== */
+
 router.get(
     "/",
     getAllProducts
 );
 
+/* ===========================================
+   Update Product
+=========================================== */
+
 router.put(
     "/:id",
     verifyToken,
     isChemist,
+    uploadProductImage.single("image"),
     updateProduct
 );
+
+/* ===========================================
+   Delete Product
+=========================================== */
 
 router.delete(
     "/:id",
@@ -96,6 +127,10 @@ router.delete(
     isChemist,
     deleteProduct
 );
+
+/* ===========================================
+   Single Product
+=========================================== */
 
 router.get(
     "/:id",
