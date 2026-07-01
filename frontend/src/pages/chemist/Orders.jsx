@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
+import OrderDetail from "./OrderDetail";
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(null);
+  
+  // New state to track which order modal is open
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   useEffect(() => {
     fetchOrders();
@@ -63,7 +67,7 @@ export default function Orders() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 py-10 px-4 sm:px-6 lg:px-8 relative">
       <div className="max-w-4xl mx-auto">
         
         {/* Header */}
@@ -105,6 +109,14 @@ export default function Orders() {
                         {order.status}
                       </span>
                     </div>
+                    
+                    {/* NEW: Button to trigger the modal */}
+                    <button 
+                      onClick={() => setSelectedOrderId(order._id)}
+                      className="mt-3 text-sm text-blue-600 hover:text-blue-800 font-semibold underline"
+                    >
+                      View Order Details
+                    </button>
                   </div>
 
                   {/* Status Update Action */}
@@ -142,6 +154,33 @@ export default function Orders() {
           </div>
         )}
       </div>
+
+      {/* NEW: Modal Overlay */}
+      {selectedOrderId && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-md max-h-[80vh] flex flex-col relative overflow-hidden">
+            
+            {/* Modal Header */}
+            <div className="flex justify-between items-center p-4 border-b border-slate-100">
+              <h2 className="text-lg font-bold text-slate-900">
+                Order #{selectedOrderId.slice(-6).toUpperCase()}
+              </h2>
+              <button 
+                onClick={() => setSelectedOrderId(null)}
+                className="text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-full w-8 h-8 flex items-center justify-center transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+            
+            {/* Modal Body with scroll */}
+            <div className="overflow-y-auto p-4">
+              <OrderDetail id={selectedOrderId} />
+            </div>
+            
+          </div>
+        </div>
+      )}
     </div>
   );
 }

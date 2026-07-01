@@ -143,7 +143,7 @@ export default function ProductDetails() {
             <div className="flex justify-center items-center p-8 bg-white border border-slate-100 rounded-xl">
               {product.image ? (
                 <img
-                  src={`http://localhost:3000${product.image}`}
+                  src={product.image}
                   alt={product.name}
                   className="max-w-full h-auto object-contain max-h-80 drop-shadow-sm"
                 />

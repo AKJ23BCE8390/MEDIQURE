@@ -49,24 +49,46 @@ export default function EditProduct() {
     e.preventDefault();
     try {
       setLoading(true);
-      let imageUrl = form.image;
+      const formData = new FormData();
 
-      if (newImage) {
-        const imageData = new FormData();
-        imageData.append("image", newImage);
+formData.append("name", form.name);
+formData.append("brand", form.brand);
+formData.append("category", form.category);
+formData.append("description", form.description);
+formData.append("price", form.price);
+formData.append("stock", form.stock);
+formData.append(
+    "prescriptionRequired",
+    form.prescriptionRequired
+);
 
-        const uploadRes = await api.post("/products/upload-image", imageData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        imageUrl = uploadRes.data.imageUrl;
-      }
+if (newImage) {
 
-      await api.put(`/products/${id}`, {
-        ...form,
-        image: imageUrl,
-      });
+    formData.append(
+        "image",
+        newImage
+    );
+
+}
+
+await api.put(
+
+    `/products/${id}`,
+
+    formData,
+
+    {
+
+        headers: {
+
+            "Content-Type":
+                "multipart/form-data"
+
+        }
+
+    }
+
+);
 
       alert("Product Updated Successfully");
       navigate("/chemist/products");
@@ -189,7 +211,7 @@ export default function EditProduct() {
                   <div className="flex-shrink-0">
                     <p className="text-xs text-slate-500 mb-1">Current Image:</p>
                     <img
-                      src={`http://localhost:3000${form.image}`}
+                      src={form.image}
                       alt="Current Product"
                       className="h-32 w-32 object-cover rounded-lg border border-slate-200 shadow-sm"
                     />

@@ -179,7 +179,7 @@ export default function Wishlist() {
                                         {product.image ? (
 
                                             <img
-                                                src={`${import.meta.env.VITE_API_URL.replace("/api","")}${product.image}`}
+                                                src={product.image}
                                                 alt={product.name}
                                                 className="h-48 object-contain"
                                             />

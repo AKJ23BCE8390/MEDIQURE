@@ -27,6 +27,7 @@ import ChemistRegister from "./pages/chemist/Register";
 import Dashboard from "./pages/chemist/Dashboard";
 import Products from "./pages/chemist/Products";
 import Orders from "./pages/chemist/Orders";
+import OrderDetail from "./pages/chemist/OrderDetail";
 import AddProduct from "./pages/chemist/AddProduct";
 import EditProduct from "./pages/chemist/EditProduct";
 import Inventory from "./pages/chemist/Inventory";
@@ -173,6 +174,13 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route 
+            path="/chemist/order-detail"
+            element={
+              <ProtectedRoute role="chemist">
+                <OrderDetail/>
+              </ProtectedRoute>}
+            />
 
           <Route
             path="/chemist/add-product"

@@ -87,10 +87,10 @@ export default function Products() {
                 <div className="h-48 bg-slate-100 p-4 relative flex items-center justify-center overflow-hidden">
                   {product.image ? (
                     <img
-                      src={`http://localhost:3000${product.image}`}
-                      alt={product.name}
-                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
-                    />
+    src={product.image}
+    alt={product.name}
+    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+/>
                   ) : (
                     <span className="text-4xl text-slate-300">💊</span>
                   )}

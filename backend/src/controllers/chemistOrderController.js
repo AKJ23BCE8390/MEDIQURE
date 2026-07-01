@@ -37,6 +37,32 @@ export const getChemistOrders = async (
     }
 };
 
+export const getOrderDetails = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+
+        const order = await db.collection("orders").findOne({
+            _id: new ObjectId(id)
+        });
+
+        if (!order) {
+            return res.status(404).json({
+                message: "Order not found"
+            });
+        }
+
+        res.status(200).json(order);
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+};
+
 export const updateOrderStatus =
     async (req, res) => {
         try {

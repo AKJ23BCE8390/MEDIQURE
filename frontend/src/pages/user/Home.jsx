@@ -138,7 +138,7 @@ export default function Home() {
                 <div className="h-48 bg-slate-100 dark:bg-slate-700/50 p-6 flex items-center justify-center relative overflow-hidden transition-colors">
                   {product.image ? (
                     <img
-                      src={`http://localhost:3000${product.image}`}
+                      src={product.image}
                       alt={product.name}
                       className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
                     />

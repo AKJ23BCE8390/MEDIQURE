@@ -20,9 +20,9 @@ export const addProduct = async (req, res) => {
             expiryDate
         } = req.body;
 
-        const image = req.file
-            ? req.file.path
-            : "";
+        console.log("REQ.FILE =", req.file);
+
+        const image = req.file ? req.file.path : "";
 
         if (
             !name ||
@@ -256,6 +256,8 @@ export const updateProduct = async (req, res) => {
             prescriptionRequired,
             expiryDate
         } = req.body;
+
+        console.log("REQ.FILE =", req.file);
 
         const image =
             req.file
