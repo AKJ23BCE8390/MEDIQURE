@@ -60,14 +60,14 @@ export default function AdminLogin() {
                 htmlFor="email" 
                 className="block text-sm font-medium text-slate-700"
               >
-                Email address
+                ID
               </label>
               <div className="mt-1 relative">
                 <input
                   id="email"
                   type="email"
                   required
-                  placeholder="admin@medicure.com"
+                  placeholder=""
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={inputStyles}
